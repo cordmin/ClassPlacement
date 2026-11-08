@@ -178,7 +178,7 @@ function renderSetupBoard() {
   clearGroupLit();
   inner.innerHTML = "";
   if (!S.studentList.length) {
-    inner.innerHTML = `<div class="empty-state" style="flex:1;"><svg width="32" height="32"><use href="#i-users"/></svg><p>왼쪽 위 불러오기 버튼으로 학생 명단을 불러오세요.</p></div>`;
+    inner.innerHTML = `<div class="empty-state" style="flex:1;"><svg width="32" height="32"><use href="#i-users"/></svg><p>[불러오기] 메뉴로 전체 학생 명단을 먼저 불러오세요</p></div>`;
     return;
   }
 
