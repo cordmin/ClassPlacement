@@ -153,6 +153,7 @@
       </div>
       <div class="sidebar-motto">함께 어울리는,<br>고른 우리 반</div>
       <div class="sidebar-footer">
+        <p style="text-align:center;"><button id="btnPrivacy" class="privacy-link" type="button" onclick="openPrivacy()">개인정보 처리방침</button></p>
         <p style="text-align:center;"><a href="https://dorms.school/" target="_blank" rel="noopener" style="color:#FFFFFF; text-decoration:none;">By Dorms member tachyon</a></p>
       </div>
     </nav>
@@ -491,7 +492,14 @@
   </div>
 </div>
 
+<dialog id="privacyDialog" class="privacy-dialog" aria-labelledby="privacyTitle">
+  <h2 id="privacyTitle" class="modal-head-styled">개인정보 처리방침</h2>
+  <div id="privacyBody" class="privacy-body" tabindex="0"></div>
+  <form method="dialog" class="privacy-foot"><button class="btn-sm btn-navy" autofocus>닫기</button></form>
+</dialog>
+
 <script src="js/common.js"></script>
+<script src="js/privacy.js"></script>
 <script src="js/shell.js"></script>
 <script src="js/groups.js"></script>
 <script src="js/setup.js"></script>

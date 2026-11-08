@@ -21,13 +21,19 @@ class ReleaseTests(unittest.TestCase):
         self.assertEqual(page.status_code, 200)
         assets = re.findall(r'(?:src|href)="((?:js|css)/[^"]+)"', page.text)
         page.close()
-        self.assertEqual(len(assets), 11)
+        self.assertEqual(len(assets), 12)
         for asset in assets:
             response = client.get('/' + asset)
             self.assertEqual(response.status_code, 200, asset)
             self.assertNotIn('text/html', response.content_type, asset)
             response.close()
         self.assertEqual(client.get('/../student_cache.json').status_code, 404)
+        with client.get('/privacy.txt') as policy:
+            self.assertEqual(policy.status_code, 200)
+            text = policy.data.decode('utf-8')
+            self.assertTrue(text.startswith('학급 편성 프로그램 개인정보 처리방침'))
+            self.assertIn('만 14세 미만 학생', text)
+            self.assertIn('%APPDATA%\\학급편성', text)
 
     def test_new_version_and_latest(self):
         with patch.object(sys, 'frozen', True, create=True), \

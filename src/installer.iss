@@ -18,6 +18,7 @@ AppPublisher=cordmin
 AppSupportURL=https://github.com/cordmin/ClassPlacement
 DefaultDirName={autopf}\학급편성
 DisableProgramGroupPage=yes
+InfoBeforeFile=static\privacy.txt
 PrivilegesRequired=lowest
 OutputDir=Output
 ; updater.py 의 SETUP_ASSET 과 같아야 한다.
@@ -38,6 +39,7 @@ Name: "korean"; MessagesFile: "compiler:Languages\Korean.isl"
 
 [Files]
 Source: "dist\{#MyAppExe}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "static\privacy.txt"; DestDir: "{app}"; DestName: "개인정보처리방침.txt"; Flags: ignoreversion
 
 [Icons]
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExe}"; Tasks: desktopicon

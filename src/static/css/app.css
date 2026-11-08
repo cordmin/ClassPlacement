@@ -299,6 +299,14 @@ body {
   padding: 8px 20px 14px;
 }
 .sidebar-footer p { font-size: 10.5px; color: #64748B; line-height: 1.6; }
+.privacy-link { background: none; border: 0; padding: 4px; color: #CBD5E1; font: inherit; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.privacy-link:hover { color: #FFFFFF; }
+.privacy-dialog { margin: auto; padding: 0; width: 760px; max-width: calc(100vw - 48px); max-height: calc(100vh - 80px); border: 1px solid var(--line-dark); border-radius: var(--radius-lg); color: var(--text-main); background: var(--card-bg); box-shadow: var(--shadow-lg); }
+.privacy-dialog[open] { display: flex; flex-direction: column; }
+.privacy-dialog::backdrop { background: rgba(15,23,42,0.55); backdrop-filter: blur(4px); }
+.privacy-dialog .modal-head-styled { margin: 0; flex-shrink: 0; }
+.privacy-body { padding: 24px 28px; min-height: 0; overflow-y: auto; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13px; line-height: 1.85; }
+.privacy-foot { padding: 12px 24px; border-top: 1px solid var(--line-dark); text-align: right; flex-shrink: 0; }
 
 /* ── 메인 ── */
 #main {
