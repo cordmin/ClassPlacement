@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+build/
+dist/
+Output/
+.venv/
+.idea/
+.vscode/
+
+# 내 컴퓨터에서만 쓰는 파일
+.claude/
+
+# 학생 자료와 프로그램이 저절로 저장하는 파일 (학생 이름이 들어 있어 올리지 않는다)
+/*.json
+*.xlsx
+~$*.xlsx

@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>학급 편성</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<!-- ── SVG Lucide Icon Sprite ── -->
+<svg style="display:none" aria-hidden="true">
+  <defs>
+    <g id="i-base" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></g>
+  </defs>
+  <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></symbol>
+  <symbol id="i-sparkles" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></symbol>
+  <symbol id="i-save" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-shuffle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.5-.6-3.3-1.7l-.5-.8"/><path d="m18 14 4 4-4 4"/></symbol>
+  <symbol id="i-bar-chart-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></symbol>
+  <symbol id="i-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></symbol>
+  <symbol id="i-alert-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></symbol>
+  <symbol id="i-check-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></symbol>
+  <symbol id="i-help-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="i-user-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" x2="22" y1="8" y2="13"/><line x1="22" x2="17" y1="8" y2="13"/></symbol>
+  <symbol id="i-user-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><circle cx="19" cy="11" r="3"/></symbol>
+  <symbol id="i-trash-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></symbol>
+  <symbol id="i-rotate-ccw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></symbol>
+  <symbol id="i-user-move" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M16 12h6M19 9l3 3-3 3"/></symbol>
+  <symbol id="i-swap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16M16 4l4 4-4 4"/><path d="M20 16H4M8 12l-4 4 4 4"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+  <symbol id="i-alert-dot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" x2="19" y1="12" y2="12"/></symbol>
+  <symbol id="i-square" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+  <symbol id="i-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+</svg>
+
+<div id="app-root">
+
+  <!-- ── 커스텀 타이틀바 (Frameless Window Drag Region) ── -->
+  <div id="titlebar">
+    <div class="titlebar-title pywebview-drag-region" ondblclick="onTitlebarDblClick(event)">
+      <span>학급 편성</span>
+    </div>
+    <div class="titlebar-controls">
+      <button id="btnUpdate" class="titlebar-chip titlebar-chip-new" hidden onclick="openUpdate()">
+        <svg width="12" height="12"><use href="#i-download"/></svg> 업데이트
+      </button>
+      <button id="appVersion" class="titlebar-chip" onclick="checkUpdate(true)" title="업데이트 확인"></button>
+      <button id="btnHelp" class="titlebar-btn" onclick="startTour()" title="사용 안내 다시 보기">
+        <svg width="15" height="15"><use href="#i-help-circle"/></svg>
+      </button>
+      <span class="titlebar-sep"></span>
+      <button onclick="winMinimize()" class="titlebar-btn" title="최소화">
+        <svg width="14" height="14"><use href="#i-minus"/></svg>
+      </button>
+      <button onclick="winToggleMaximize()" class="titlebar-btn" title="최대화">
+        <svg width="12" height="12"><use href="#i-square"/></svg>
+      </button>
+      <button onclick="winClose()" class="titlebar-btn titlebar-btn-close" title="닫기">
+        <svg width="14" height="14"><use href="#i-x"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="app">
+
+    <!-- ══ 사이드바 (Sidebar) ══════════════════════════════ -->
+    <nav id="sidebar">
+      <div class="sidebar-deco">
+        <svg style="top:0" width="210" height="150" viewBox="0 0 210 150" aria-hidden="true"><circle cx="232" cy="22" r="123" fill="#1C2A49"/></svg>
+        <svg style="bottom:0" width="210" height="180" viewBox="0 0 210 180" aria-hidden="true"><circle cx="249" cy="202" r="157" fill="#1E3A8A" opacity=".5"/></svg>
+      </div>
+
+      <div class="sidebar-brand">
+        <!-- 로고: 세 무리 별자리 = 세 반 -->
+        <svg class="brand-logo" width="78" height="62" viewBox="0 0 78 62" aria-hidden="true">
+          <g fill="none" stroke="#93C5FD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 18 20 8 30 22 8 18"/>
+            <path d="M46 8 62 12 56 26 46 8"/>
+            <path d="M26 40 40 52 52 40 38 34 26 40"/>
+          </g>
+          <circle cx="8" cy="18" r="4" fill="#DBEAFE"/><circle cx="20" cy="8" r="4" fill="#93C5FD"/><circle cx="30" cy="22" r="4" fill="#DBEAFE"/>
+          <circle cx="46" cy="8" r="4" fill="#93C5FD"/><circle cx="62" cy="12" r="4" fill="#DBEAFE"/><circle cx="56" cy="26" r="4" fill="#93C5FD"/>
+          <circle cx="26" cy="40" r="4" fill="#DBEAFE"/><circle cx="40" cy="52" r="4" fill="#93C5FD"/><circle cx="52" cy="40" r="4" fill="#DBEAFE"/>
+          <circle cx="38" cy="34" r="5.5" fill="#3B82F6"/>
+        </svg>
+        <div class="brand-name">학급 편성</div>
+        <div class="brand-en">CLASS PLACEMENT</div>
+      </div>
+      
+      <!-- 사이드바 상단 액션 버튼 영역 -->
+      <div class="sidebar-top-actions">
+        
+        <!-- 2. 그 아래: 내려받기, 불러오기, 결과저장 아이콘 버튼 (슬레이트 색상 통일, 상단 툴팁) -->
+        <div class="sidebar-icon-row">
+          
+          <!-- 내려받기 아이콘 -->
+          <div class="sidebar-icon-wrapper">
+            <button class="sidebar-icon-btn" onclick="downloadTemplate()" aria-label="내려받기">
+              <svg width="18" height="18"><use href="#i-download"/></svg>
+            </button>
+            <div class="tooltip-bubble">양식 내려받기</div>
+          </div>
+
+          <!-- 불러오기 아이콘 -->
+          <div class="sidebar-icon-wrapper">
+            <button class="sidebar-icon-btn" onclick="loadExcel()" aria-label="불러오기">
+              <svg width="18" height="18"><use href="#i-upload"/></svg>
+            </button>
+            <div class="tooltip-bubble">명단 불러오기</div>
+          </div>
+
+          <!-- 결과저장 아이콘 -->
+          <div class="sidebar-icon-wrapper">
+            <button class="sidebar-icon-btn" onclick="saveExcel()" aria-label="결과저장">
+              <svg width="18" height="18"><use href="#i-save"/></svg>
+            </button>
+            <div class="tooltip-bubble">결과 엑셀저장</div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-btn active" id="nav-setup" onclick="navigate('setup')">
+          <span class="nav-icon"><svg width="18" height="18"><use href="#i-settings"/></svg></span> 기초 편성 작업
+        </div>
+        <div class="nav-btn" id="nav-auto" onclick="openAssignModal()">
+          <span class="nav-icon"><svg width="18" height="18"><use href="#i-sparkles"/></svg></span> 자동 학급 편성
+        </div>
+        <div class="nav-btn" id="nav-manual" onclick="navigate('manual')">
+          <span class="nav-icon"><svg width="18" height="18"><use href="#i-shuffle"/></svg></span> 수동 학급 편성
+        </div>
+        <div class="nav-btn" id="nav-result" onclick="navigate('result')">
+          <span class="nav-icon"><svg width="18" height="18"><use href="#i-bar-chart-2"/></svg></span> 학급 편성 결과
+        </div>
+        <div class="nav-btn" id="nav-verify" onclick="navigate('verify')">
+          <span class="nav-icon"><svg width="18" height="18"><use href="#i-check-circle"/></svg></span> 학급 편성 검증
+        </div>
+      </div>
+      <div class="sidebar-motto">함께 어울리는,<br>고른 우리 반</div>
+      <div class="sidebar-footer">
+        <p style="text-align:center;"><a href="https://dorms.school/" target="_blank" rel="noopener" style="color:#FFFFFF; text-decoration:none;">By Dorms member tachyon</a></p>
+      </div>
+    </nav>
+
+    <!-- ══ 메인 영역 ════════════════════════════════ -->
+    <div id="main">
+
+      <!-- ── 기초 편성 작업 페이지 ── -->
+      <div class="page active" id="page-setup">
+          <div class="action-group">
+            <div class="group-drop" id="sepDrop">
+              <button class="btn-sm group-toggle" onclick="toggleDrop('sep')">
+                <span class="led" style="color:#F87171"></span> 분리 그룹
+                <svg class="chevron" width="14" height="14"><use href="#i-chevron-down"/></svg>
+              </button>
+              <div class="card group-drop-panel">
+                <div class="card-body" id="sepPanel"></div>
+              </div>
+            </div>
+            <div class="group-drop" id="joinDrop">
+              <button class="btn-sm group-toggle" onclick="toggleDrop('join')">
+                <span class="led" style="color:#60A5FA"></span> 통합 그룹
+                <svg class="chevron" width="14" height="14"><use href="#i-chevron-down"/></svg>
+              </button>
+              <div class="card group-drop-panel">
+                <div class="card-body" id="joinPanel"></div>
+              </div>
+            </div>
+            <div class="group-drop" id="homonymDrop">
+              <button class="btn-sm group-toggle" onclick="toggleDrop('homonym')">
+                <span class="led" style="color:#4ADE80"></span> 동명 그룹
+                <svg class="chevron" width="14" height="14"><use href="#i-chevron-down"/></svg>
+              </button>
+              <div class="card group-drop-panel">
+                <div class="card-body" id="homonymPanel"></div>
+              </div>
+            </div>
+            <div class="usage-hint">
+              <span><svg width="18" height="24" viewBox="0 0 18 24"><rect x="1" y="1" width="16" height="22" rx="8" fill="#fff" stroke="#94A3B8" stroke-width="1.4"/><path d="M9 1.7V10H1.7V9A7.3 7.3 0 0 1 9 1.7Z" fill="#4A5565"/><path d="M1.5 10H16.5M9 1.5V10" stroke="#94A3B8" stroke-width="1.2"/></svg><b>좌클릭</b> 학생 선택</span>
+              <span class="hint-sep"></span>
+              <span><svg width="18" height="24" viewBox="0 0 18 24"><rect x="1" y="1" width="16" height="22" rx="8" fill="#fff" stroke="#94A3B8" stroke-width="1.4"/><path d="M9 1.7V10H16.3V9A7.3 7.3 0 0 0 9 1.7Z" fill="#4A5565"/><path d="M1.5 10H16.5M9 1.5V10" stroke="#94A3B8" stroke-width="1.2"/></svg><b>우클릭</b> 분리·통합 그룹 작업</span>
+              <span class="hint-sep"></span>
+              <span><svg width="26" height="24" viewBox="0 0 26 24"><rect x="1" y="3" width="24" height="20" rx="5" fill="#4A5565"/><rect x="1" y="1" width="24" height="19" rx="5" fill="#fff" stroke="#94A3B8" stroke-width="1.4"/><text x="13" y="13.8" text-anchor="middle" font-size="7.5" font-weight="800" fill="#1E293B" font-family="sans-serif">ESC</text></svg>선택 취소</span>
+            </div>
+          </div>
+
+        <div class="board-scroll">
+          <div class="board-inner" id="setupBoard"></div>
+        </div>
+      </div>
+
+      <!-- ── 수동 배정 페이지 ── -->
+      <div class="page" id="page-manual">
+        <div class="action-group">
+          <div class="undo-split" id="undoSplit">
+            <button class="btn-sm group-toggle undo-main" id="undoMainBtn" disabled onclick="undoMove(1)" onmouseenter="undoPreview(1)" onmouseleave="if(!undoIsOpen())undoPreview(0)">
+              <svg width="14" height="14"><use href="#i-undo"/></svg> 되돌리기
+            </button>
+            <button class="btn-sm group-toggle undo-more" id="undoMoreBtn" disabled onclick="toggleUndoPanel(event)" aria-label="이동 기록 펼치기">
+              <span class="undo-cnt" id="undoCnt"></span><svg class="chevron" width="14" height="14"><use href="#i-chevron-down"/></svg>
+            </button>
+            <div class="undo-panel" id="undoPanel">
+              <div class="undo-ph">이동 기록
+                <button class="undo-reset" onclick="resetAssign()"><svg width="12" height="12"><use href="#i-rotate-ccw"/></svg>처음 배정결과로 초기화</button>
+              </div>
+              <div id="undoRows" onmouseleave="undoPreview(0)"></div>
+            </div>
+          </div>
+          <div class="usage-hint">
+            <span><svg width="18" height="24" viewBox="0 0 18 24"><rect x="1" y="1" width="16" height="22" rx="8" fill="#fff" stroke="#94A3B8" stroke-width="1.4"/><path d="M9 1.7V10H1.7V9A7.3 7.3 0 0 1 9 1.7Z" fill="#4A5565"/><path d="M1.5 10H16.5M9 1.5V10" stroke="#94A3B8" stroke-width="1.2"/></svg><b>학생 드래그</b> → 학급 이동</span>
+            <span class="hint-sep"></span>
+            <span><svg width="18" height="24" viewBox="0 0 18 24"><rect x="1" y="1" width="16" height="22" rx="8" fill="#fff" stroke="#94A3B8" stroke-width="1.4"/><path d="M9 1.7V10H1.7V9A7.3 7.3 0 0 1 9 1.7Z" fill="#4A5565"/><path d="M1.5 10H16.5M9 1.5V10" stroke="#94A3B8" stroke-width="1.2"/></svg><b>학급 드래그</b> → 학급 순서 이동</span>
+          </div>
+        </div>
+        <div class="board-scroll">
+          <div class="board-inner" id="boardInner"></div>
+        </div>
+      </div>
+
+      <!-- ── 학급 편성 결과 ── -->
+      <div class="page" id="page-result">
+        <div class="filter-bar" id="filterBar">
+          <span style="font-size:12px;font-weight:700;color:var(--text-sub);">학급 선택:</span>
+        </div>
+        <div class="result-detail">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <svg width="16" height="16" style="color:#38BDF8"><use href="#i-users"/></svg>
+                학급 편성 결과
+              </div>
+              <span id="resultCount" style="font-size:12px;color:#94A3B8;font-weight:600;"></span>
+            </div>
+            <div class="card-body">
+              <table class="data-table" id="resultTable">
+                <colgroup><col style="width:15%"><col style="width:13%"><col style="width:20%"><col style="width:15%"><col style="width:22%"><col style="width:15%"></colgroup>
+                <thead><tr id="resultHead"></tr></thead>
+                <tbody id="resultBody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="result-side">
+            <div class="card" id="classStatsCard">
+              <div class="card-header">
+                <div class="card-title">
+                  <svg width="16" height="16" style="color:#38BDF8"><use href="#i-bar-chart-2"/></svg>
+                  학급별 성적 통계
+                </div>
+              </div>
+              <div class="card-body class-stats-wrap">
+                <table class="data-table" id="classStatsTable">
+                  <tbody id="classStatsBody"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <svg width="16" height="16" style="color:#38BDF8"><use href="#i-grid"/></svg>
+                  학급별 인원 변동
+                </div>
+              </div>
+              <div class="card-body class-matrix-wrap">
+                <table class="class-matrix" id="classMatrix"></table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 학급 편성 검증 페이지 (왼쪽: 검증, 오른쪽: 편성 도움말) ── -->
+      <div class="page" id="page-verify">
+        <div class="vf-split">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <svg width="16" height="16" style="color:#2DD4BF"><use href="#i-search"/></svg>
+                학급 편성 검증
+              </div>
+              <button class="vf-recheck" onclick="runVerify()">
+                <svg width="13" height="13"><use href="#i-rotate-ccw"/></svg> 다시 검사하기
+              </button>
+            </div>
+            <div class="card-body">
+              <div class="vf-head" id="vfHead"></div>
+              <div class="vf-tiles" id="vfTiles"></div>
+              <div class="vf-notes" id="vfNotes"></div>
+              <div class="vf-tablewrap"><table class="vf-table" id="vfTable"></table></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <svg width="16" height="16" style="color:#38BDF8"><use href="#i-book"/></svg>
+                편성 도움말
+              </div>
+            </div>
+            <div class="card-body">
+              <section class="vf-help">
+                <h3><span class="n">1</span>자동 편성 규칙</h3>
+                <div class="vf-kv">
+                  <div>1. 통합 그룹</div><div>같은 그룹 학생을 인원이 가장 적은 반에 통째로 넣어요.</div>
+                  <div>2. 분리 그룹</div><div>같은 그룹 학생을 서로 다른 반에 넣어요.</div>
+                  <div>3. 동명이인</div><div>이름이 같은 학생도 서로 다른 반에 넣어요.</div>
+                  <div>4. 나머지 학생</div><div>성적 높은 순으로, 인원이 적은 반부터 넣어요. 인원이 같으면 같은 성별이 적은 반을 골라요.</div>
+                  <div>5. 인원 맞추기</div><div>반끼리 인원 차이가 1명 이하가 될 때까지 옮겨요.</div>
+                  <div>6. 성적 맞추기</div><div>같은 성별끼리 바꿔서 반 평균 차이를 자동 편성에서 고른 기준 안으로 줄여요.</div>
+                </div>
+              </section>
+              <section class="vf-help">
+                <h3><span class="n">2</span>자주 묻는 질문</h3>
+                <div class="vf-faq"><b>Q. 성적 균형이 '검토'로 나와요.</b><span>평균이 높은 반의 학생과 낮은 반의 같은 성별 학생을 수동 학급 편성에서 바꿔 보세요.</span></div>
+                <div class="vf-faq"><b>Q. 되돌리기가 안 돼요.</b><span>엑셀로 저장하면 이동 기록이 지워져요. 저장한 모습이 새 출발점이에요.</span></div>
+                <div class="vf-faq"><b>Q. 처음 배정 결과로 돌아가고 싶어요.</b><span>수동 학급 편성에서 이동 기록(▾)을 열고 '처음 배정결과로 초기화'를 누르세요.</span></div>
+                <div class="vf-faq"><b>Q. 동명 그룹을 지울 수 있나요?</b><span>아니요. 이름이 같은 학생은 항상 다른 반에 넣어요.</span></div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /main -->
+  </div><!-- /app -->
+</div><!-- /app-root -->
+
+<!-- 토스트 메세지 용 영역 -->
+<div id="toast-area"></div>
+
+<!-- 로딩 오버레이 -->
+<div id="groupTips"></div>
+<div id="selDim"></div>
+<div id="loading">
+  <div class="spinner"></div>
+  <p id="loadingMsg" style="font-size:13.5px;color:var(--brand);font-weight:700;">처리 중...</p>
+</div>
+
+<!-- ── 독립된 이쁜 편성 학급 수 설정 모달 ── -->
+<div id="assign-modal-overlay" class="modal-overlay-bg">
+  <div class="modal-box-styled">
+    <div class="modal-head-styled">
+      <svg width="20" height="20"><use href="#i-settings"/></svg>
+      자동 학급 편성
+    </div>
+    <div class="modal-body assign-rules">
+      <div class="assign-row">
+        <span class="assign-label">학급 수</span>
+        <div class="num-stepper">
+          <button type="button" onclick="stepClasses(-1)" aria-label="학급 수 줄이기">−</button>
+          <label class="num-unit"><input type="number" id="modalNumClasses" value="6" min="1" max="30" aria-label="학급 수"><span>학급</span></label>
+          <button type="button" onclick="stepClasses(1)" aria-label="학급 수 늘리기">+</button>
+        </div>
+      </div>
+      <div>
+        <div class="assign-row">
+          <span class="assign-label">반별 성적 차이</span>
+          <span class="score-help"><span class="score-value" id="scoreValue"></span><span class="help-dot" tabindex="0" aria-label="계산 방법">?</span><span class="help-tip" id="scoreTip" role="tooltip"></span></span>
+        </div>
+        <input type="hidden" id="ruleScore" value="2">
+        <div class="score-seg" id="scoreTicks" role="radiogroup" aria-label="반별 성적 차이">
+          <button type="button" onclick="setScoreStep(0)">아주 작게</button><button type="button" onclick="setScoreStep(1)">작게</button><button type="button" onclick="setScoreStep(2)">보통</button><button type="button" onclick="setScoreStep(3)">크게</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-sm btn-navy" onclick="confirmAssign()">
+        <span aria-hidden="true" style="color:#FBBF24;">✦</span> 배정 시작
+      </button>
+      <button class="btn-sm" onclick="closeAssignModal()">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- 사유 입력 모달 -->
+<div id="modal-overlay" class="modal-overlay-bg">
+  <div class="modal-box-styled">
+    <div class="modal-head-styled" id="modalTitle">사유 입력</div>
+    <div class="modal-body">
+    <div id="modalChips" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;"></div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button class="reason-chip" id="modalOther" style="flex-shrink:0;">기타</button>
+      <input type="text" class="modal-input" id="modalInput" placeholder="사유를 직접 입력하세요" style="flex:1;min-width:0;margin-bottom:0;">
+    </div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-sm btn-navy" onclick="closeModal(true)">확인</button>
+      <button class="btn-sm" onclick="closeModal(false)">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- 확인 모달 (Confirm) -->
+<div id="confirm-overlay" class="modal-overlay-bg">
+  <div class="modal-box-styled">
+    <div class="modal-head-styled">
+      <svg width="20" height="20"><use href="#i-help-circle"/></svg> 확인 메시지
+    </div>
+    <div class="modal-body" style="font-size:13.5px;font-weight:600;color:var(--text-main);line-height:1.6;white-space:pre-line;" id="confirmMsg"></div>
+    <div class="modal-btns">
+      <button class="btn-sm btn-navy" onclick="_confirmResolve(true)">확인</button>
+      <button class="btn-sm" onclick="_confirmResolve(false)">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- 종료 전 저장 확인 -->
+<div id="close-overlay" class="modal-overlay-bg" onkeydown="if(event.key==='Escape'){event.stopPropagation();cancelClose();}">
+  <div class="modal-box-styled">
+    <div class="modal-head-styled">
+      <svg width="20" height="20"><use href="#i-help-circle"/></svg> 저장 확인
+    </div>
+    <div class="modal-body" style="text-align:center;line-height:1.6;">
+      <div style="font-size:14.5px;font-weight:700;color:var(--text-main);">편성 결과가 바뀌었는데 아직 저장하지 않았어요.</div>
+      <div style="font-size:13px;color:var(--text-sub);margin-top:4px;">종료하기 전에 저장할까요?</div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-sm btn-navy" onclick="finishClose(true)">저장 후 종료</button>
+      <button class="btn-sm" onclick="finishClose(false)">저장 없이 종료</button>
+      <button class="btn-sm" id="closeCancelBtn" onclick="cancelClose()">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- 학생 우클릭 메뉴 -->
+<div id="ctxMenu" class="ctx-menu">
+  <button onclick="addLogic('sep', true)"><svg width="14" height="14" style="color:var(--accent-coral)"><use href="#i-user-x"/></svg> 분리그룹 추가</button>
+  <button onclick="addLogic('sep', false)"><svg width="14" height="14" style="color:var(--accent-coral)"><use href="#i-user-x"/></svg> 분리그룹 합류</button>
+  <button onclick="addLogic('join', true)"><svg width="14" height="14" style="color:var(--accent-blue)"><use href="#i-user-check"/></svg> 통합그룹 추가</button>
+  <button onclick="addLogic('join', false)"><svg width="14" height="14" style="color:var(--accent-blue)"><use href="#i-user-check"/></svg> 통합그룹 합류</button>
+</div>
+
+<!-- 그룹 합류 선택 모달 -->
+<div id="group-select-overlay" class="modal-overlay-bg">
+  <div class="modal-box-styled">
+    <div class="modal-head-styled" id="groupSelectTitle">합류할 그룹 선택</div>
+    <div class="modal-body">
+      <div id="groupSelectList" style="display:flex;flex-direction:column;gap:12px;max-height:300px;overflow-y:auto;"></div>
+    </div>
+    <div class="modal-btns">
+      <button id="groupSelectApply" class="btn-sm btn-navy" style="display:none;">적용</button>
+      <button class="btn-sm" onclick="_groupSelectResolve(null)">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- 업데이트 안내 -->
+<div id="update-overlay" class="modal-overlay-bg">
+  <div class="modal-box-styled" role="dialog" aria-modal="true" aria-labelledby="updTitle">
+    <div class="modal-head-styled" id="updTitle">
+      <svg width="20" height="20"><use href="#i-download"/></svg> 새 버전 업데이트
+    </div>
+    <div class="modal-body update-body">
+      <div class="update-vers"><span id="updFrom"></span><svg width="16" height="16"><use href="#i-arrow-right"/></svg><b id="updTo"></b></div>
+      <div id="updMsg"></div>
+      <div class="update-bar" id="updBar" hidden><i></i></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-sm btn-navy" id="updOk">업데이트</button>
+      <button class="btn-sm" id="updLater" onclick="closeUpdate()">나중에</button>
+    </div>
+  </div>
+</div>
+
+<!-- 가이드 투어: 밝힌 자리 옆에 설명 카드 -->
+<div id="tour" class="tour" hidden role="dialog" aria-modal="true" aria-labelledby="tourTitle" tabindex="-1">
+  <div class="tour-spot" id="tourSpot"></div>
+  <div class="tour-card" id="tourCard">
+    <button class="tour-x" id="tourSkip" aria-label="안내 닫기"><svg width="14" height="14"><use href="#i-x"/></svg></button>
+    <div class="tour-step" id="tourStep"></div>
+    <h3 id="tourTitle"></h3>
+    <p id="tourText"></p>
+    <div class="tour-foot">
+      <label><input type="checkbox" id="tourHide"> 다시 보지 않기</label>
+      <button class="btn-sm" id="tourPrev">이전</button>
+      <button class="btn-sm btn-navy" id="tourNext">다음</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/shell.js"></script>
+<script src="js/groups.js"></script>
+<script src="js/setup.js"></script>
+<script src="js/actions.js"></script>
+<script src="js/board.js"></script>
+<script src="js/result.js"></script>
+<script src="js/tour.js"></script>
+<script src="js/updates.js"></script>
+<script src="js/boot.js"></script>
+</body>
+</html>
