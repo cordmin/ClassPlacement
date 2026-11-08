@@ -4,6 +4,9 @@ build/
 dist/
 Output/
 .venv/
+.build/
+.local-data/
+release/
 .idea/
 .vscode/
 
@@ -13,4 +16,6 @@ Output/
 # 학생 자료와 프로그램이 저절로 저장하는 파일 (학생 이름이 들어 있어 올리지 않는다)
 /*.json
 *.xlsx
+!src/resources/학생기초자료(예시).xlsx
 ~$*.xlsx
+/사진/

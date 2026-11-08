@@ -1,11 +1,13 @@
 # -*- mode: python ; coding: utf-8 -*-
-# src 폴더에서: pyinstaller 학급편성.spec  →  dist\학급편성프로그램.exe
+# 프로젝트 루트에서 scripts/build.ps1로 빌드한다.
 import os
 
+SRC = os.path.join(os.path.dirname(SPECPATH), 'src')
 a = Analysis(
-    [os.path.join(SPECPATH, 'main.py')],
-    pathex=[SPECPATH],
-    datas=[(os.path.join(SPECPATH, 'static'), 'static')],
+    [os.path.join(SRC, 'main.py')],
+    pathex=[SRC],
+    datas=[(os.path.join(SRC, 'static'), 'static'),
+           (os.path.join(SRC, 'resources'), 'resources')],
     # 쓰지 않는 큰 모듈은 빼서 용량을 줄인다
     excludes=['tkinter', '_tkinter', 'matplotlib', 'scipy', 'PIL', 'PyQt5', 'PyQt6', 'PySide2', 'PySide6',
               'IPython', 'jupyter', 'notebook', 'pytest', 'sphinx', 'docutils', 'pandas.tests', 'numpy.tests', 'numpy.f2py'],
@@ -22,5 +24,5 @@ exe = EXE(
     name='학급편성프로그램',
     upx=True,
     console=False,
-    icon=os.path.join(SPECPATH, 'icon.ico'),
+    icon=os.path.join(SRC, 'static', 'assets', 'app.ico'),
 )

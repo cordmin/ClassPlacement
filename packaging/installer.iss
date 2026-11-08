@@ -1,6 +1,4 @@
-; 설치 파일 만들기 (Inno Setup 6, src 폴더에서)
-;   1) pyinstaller 학급편성.spec               → dist\학급편성프로그램.exe
-;   2) ISCC /DMyAppVersion=3.1.0 installer.iss → Output\ClassPlacementSetup.exe
+; 프로젝트 루트에서 scripts/build.ps1 실행 → release\ClassPlacementSetup.exe
 ; 관리자 권한 없이 사용자 폴더에 설치한다. 그래야 자동 업데이트가 확인 창 없이 조용히 설치된다.
 
 #ifndef MyAppVersion
@@ -14,16 +12,16 @@
 AppId={{AED3F54E-BF89-4338-AAFA-95F73852F5FB}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
-AppPublisher=cordmin
+AppPublisher=이경민
 AppSupportURL=https://github.com/cordmin/ClassPlacement
 DefaultDirName={autopf}\학급편성
 DisableProgramGroupPage=yes
-InfoBeforeFile=static\privacy.txt
+InfoBeforeFile=..\src\static\privacy.txt
 PrivilegesRequired=lowest
-OutputDir=Output
+OutputDir=..\release
 ; updater.py 의 SETUP_ASSET 과 같아야 한다.
 OutputBaseFilename=ClassPlacementSetup
-SetupIconFile=icon.ico
+SetupIconFile=..\src\static\assets\app.ico
 UninstallDisplayIcon={app}\{#MyAppExe}
 Compression=lzma2
 SolidCompression=yes
@@ -38,8 +36,9 @@ Name: "desktopicon"; Description: "바탕화면에 바로가기 만들기"; Grou
 Name: "korean"; MessagesFile: "compiler:Languages\Korean.isl"
 
 [Files]
-Source: "dist\{#MyAppExe}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "static\privacy.txt"; DestDir: "{app}"; DestName: "개인정보처리방침.txt"; Flags: ignoreversion
+Source: "..\.build\dist\{#MyAppExe}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\static\privacy.txt"; DestDir: "{app}"; DestName: "개인정보처리방침.txt"; Flags: ignoreversion
+Source: "..\src\resources\학생기초자료(예시).xlsx"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExe}"; Tasks: desktopicon

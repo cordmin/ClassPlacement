@@ -126,9 +126,13 @@ function closeModal(ok) {
 }
 
 let _confirmResolve = null;
-function openConfirm(msg) {
+function openConfirm(msg, title = "확인 메시지", okText = "확인") {
+  document.getElementById("confirm-overlay").classList.toggle("reset-confirm", title === "전체 초기화");
+  document.getElementById("confirmTitle").textContent = title;
+  document.getElementById("confirmOkBtn").textContent = okText;
   document.getElementById("confirmMsg").textContent = msg;
   document.getElementById("confirm-overlay").classList.add("show");
+  document.getElementById("confirmCancelBtn").focus();
   return new Promise(res => { _confirmResolve = (ok) => {
     document.getElementById("confirm-overlay").classList.remove("show");
     res(ok);

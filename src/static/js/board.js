@@ -365,13 +365,13 @@ function undoPreview(k) {
 async function undoMove(k = 1) {
   const moved = undoDiff(k).students;
   closeUndoPanel();
-  showLoading("되돌리는 중...");
+  showLoading("실행을 취소하는 중...");
   const r = await api("/api/undo", "POST", { count: k });
   hideLoading();
-  if (!r.undone) { toast("되돌릴 이동이 없어요. (저장하면 이동 기록이 지워져요)", "info"); return; }
+  if (!r.undone) { toast("실행을 취소할 이동이 없어요. (저장하면 이동 기록이 지워져요)", "info"); return; }
   applyResult(r.result);
   moved.forEach(([, n, j]) => _undoStuEl(j, n)?.classList.add("undo-flash"));
-  toast(k === 1 ? "이동 1개를 되돌렸어요" : `이동 ${k}개를 한 번에 되돌렸어요`, "info");
+  toast(k === 1 ? "최근 이동을 취소했어요" : `이동 ${k}개의 실행을 취소했어요`, "info");
 }
 
 async function resetAssign() {

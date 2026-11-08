@@ -13,7 +13,7 @@ import tempfile
 import urllib.request
 
 # 바꿀 성격에 맞게 손으로 올린다 (오류 수정: 끝자리 / 기능 추가: 가운데 / 크게 바뀜: 앞자리).
-# main 에 올리면 GitHub Actions(.github/workflows/release.yml)가 이 번호로 릴리스를 만든다.
+# GitHub Actions(.github/workflows/release.yml)를 수동 실행하면 이 번호로 릴리스를 만든다.
 APP_VERSION = '3.1.2'
 UPDATE_REPO = 'cordmin/ClassPlacement'
 # 릴리스에 올리는 설치 파일 이름. installer.iss 의 OutputBaseFilename 과 같아야 한다.

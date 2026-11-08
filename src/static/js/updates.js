@@ -2,6 +2,18 @@
 // [나중에]를 눌러도 타이틀바의 [업데이트] 버튼으로 다시 열 수 있다.
 let pendingUpdate = null;
 
+function openAbout() {
+  document.getElementById("aboutVersion").textContent = document.getElementById("appVersion").textContent;
+  document.getElementById("aboutDialog").showModal();
+}
+
+function checkAboutUpdate() {
+  document.getElementById("aboutDialog").close();
+  checkUpdate(true);
+}
+
+document.getElementById("aboutDialog").addEventListener("keydown", e => e.stopPropagation());
+
 async function checkUpdate(manual = false) {
   const btn = document.getElementById("appVersion");
   if (manual) btn.disabled = true;
@@ -12,9 +24,11 @@ async function checkUpdate(manual = false) {
     document.getElementById("btnUpdate").hidden = false;
     document.getElementById("tour").hidden = true;   // 가이드 투어보다 업데이트 질문을 먼저 보인다
     openUpdate();
+  } else if (manual && res.status === "development") {
+    pendingUpdate = { current: btn.textContent, version: "새 버전", preview: true };
+    openUpdate();
   } else if (manual) {
-    toast({ latest: "지금 최신 버전을 쓰고 있어요.",
-            development: "개발 중에는 업데이트를 확인하지 않아요." }[res.status]
+    toast({ latest: "지금 최신 버전을 쓰고 있어요." }[res.status]
           || "업데이트를 확인하지 못했어요. 인터넷 연결을 확인해 주세요.", res.status === "error" ? "error" : "info");
   }
 }
@@ -30,6 +44,10 @@ function openUpdate() {
   document.getElementById("updTo").textContent = pendingUpdate.version;
   document.getElementById("updMsg").textContent = "새 버전이 나왔어요. 지금 업데이트할까요?\n작업한 내용은 그대로 남아요.";
   document.getElementById("updOk").textContent = "업데이트";
+  if (pendingUpdate.preview) {
+    document.getElementById("updOk").textContent = "확인";
+  }
+  document.getElementById("updPreview").hidden = !pendingUpdate.preview;
   setUpdateBusy(false);
   document.getElementById("update-overlay").classList.add("show");
   document.getElementById("updOk").focus();
@@ -40,6 +58,7 @@ function closeUpdate() {
 }
 
 document.getElementById("updOk").onclick = async () => {
+  if (pendingUpdate?.preview) { closeUpdate(); return; }
   setUpdateBusy(true);
   document.getElementById("updOk").textContent = "받는 중…";
   document.getElementById("updMsg").textContent = "새 버전을 받고 있어요.\n받기가 끝나면 프로그램이 닫히고, 설치가 끝나면 다시 열려요.";

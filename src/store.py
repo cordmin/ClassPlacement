@@ -1,9 +1,10 @@
 """프로그램 상태(STATE)와 자동 저장 파일.
 
-설치판은 사용자 폴더(%APPDATA%\\학급편성)에, 개발할 때는 프로젝트 폴더에 저장한다.
+설치판은 사용자 폴더(%APPDATA%\\학급편성)에, 개발할 때는 프로젝트의 .local-data 폴더에 저장한다.
 업데이트·재설치를 해도 자료가 남는다.
 """
 import json
+import copy
 import os
 import sys
 import tempfile
@@ -13,7 +14,7 @@ from engine import MAX_UNDO, infer_op, sync_homonym_groups
 if getattr(sys, "frozen", False):
     DATA_DIR = os.path.join(os.environ.get("APPDATA", "."), "학급편성")
 else:
-    DATA_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".local-data")
 os.makedirs(DATA_DIR, exist_ok=True)
 
 CONFIG_SEP     = os.path.join(DATA_DIR, "sep_config.json")
@@ -22,7 +23,7 @@ CONFIG_STUDENT = os.path.join(DATA_DIR, "student_cache.json")
 CONFIG_ASSIGN  = os.path.join(DATA_DIR, "assign_result_cache.json")
 SETTINGS       = os.path.join(DATA_DIR, "settings.json")   # 화면 설정 (가이드 투어 다시 보지 않기 등)
 
-STATE = {
+EMPTY_STATE = {
     "file_path":   None,
     "num_classes": 0,
     "class_data":  [],     # 반별 학생 목록
@@ -36,6 +37,7 @@ STATE = {
     "full_result": [],     # 배정 결과 레코드
     "student_list": [],    # 원본 명단
 }
+STATE = copy.deepcopy(EMPTY_STATE)
 ASSIGN_KEYS = ("num_classes", "class_data", "full_result", "history", "initial", "dirty", "score_gap", "score_rate")
 
 
@@ -63,14 +65,23 @@ def save_configs():
     try:
         write_json(CONFIG_SEP, STATE["sep_data"])
         write_json(CONFIG_JOIN, STATE["join_data"])
-        if STATE["student_list"]:
-            write_json(CONFIG_STUDENT, {"file_path": STATE["file_path"], "student_list": STATE["student_list"]})
-        if STATE["class_data"]:
-            write_json(CONFIG_ASSIGN, {k: STATE[k] for k in ASSIGN_KEYS})
-        elif os.path.exists(CONFIG_ASSIGN):
-            os.remove(CONFIG_ASSIGN)
+        write_json(CONFIG_STUDENT, {"file_path": STATE["file_path"], "student_list": STATE["student_list"]})
+        write_json(CONFIG_ASSIGN, {k: STATE[k] for k in ASSIGN_KEYS})
     except Exception as e:
         print("[Save Config Exception]", e)
+        raise
+
+
+def reset_configs():
+    """작업 자료만 비운다. 원본·내보낸 엑셀과 안내 설정은 유지한다."""
+    previous = copy.deepcopy(STATE)
+    STATE.clear()
+    STATE.update(copy.deepcopy(EMPTY_STATE))
+    try:
+        save_configs()
+    except Exception:
+        STATE.clear()
+        STATE.update(previous)
         raise
 
 

@@ -15,7 +15,7 @@ import excel
 import updater
 from engine import (HOMONYM_REASON, assign, build_result, match_student, push_history, same_student,
                     student_frame, sync_homonym_groups)
-from store import DATA_DIR, SETTINGS, STATE, load_configs, read_json, save_configs, write_json
+from store import DATA_DIR, SETTINGS, STATE, load_configs, read_json, reset_configs, save_configs, write_json
 
 BASE = getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__)))
 app = Flask(__name__, static_folder=os.path.join(BASE, "static"), static_url_path="")
@@ -25,7 +25,11 @@ XLSX = ("Excel 파일 (*.xlsx)",)
 
 
 def ask_open():
-    r = WINDOW.create_file_dialog(webview.FileDialog.OPEN, file_types=XLSX)
+    # 설치판은 설치 폴더, 개발 실행·단독 exe는 포함된 예시 폴더부터 보여 준다.
+    directory = os.path.join(BASE, "resources")
+    if getattr(sys, "frozen", False) and os.path.isfile(os.path.join(os.path.dirname(sys.executable), "학생기초자료(예시).xlsx")):
+        directory = os.path.dirname(sys.executable)
+    r = WINDOW.create_file_dialog(webview.FileDialog.OPEN, directory=directory, file_types=XLSX)
     return r[0] if r else None
 
 
@@ -71,6 +75,14 @@ def api_settings():
 
 
 # ── 엑셀 ──────────────────────────────────────────────────
+
+@app.route("/api/reset_all", methods=["POST"])
+def api_reset_all():
+    try:
+        reset_configs()
+        return jsonify({"ok": True})
+    except Exception as e:
+        return jsonify({"ok": False, "msg": f"전체 초기화를 완료하지 못했습니다. {e}"})
 
 @app.route("/api/load_excel", methods=["POST"])
 def api_load_excel():

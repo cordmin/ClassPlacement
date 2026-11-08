@@ -1,5 +1,6 @@
 """화면 자원·업데이트·저장 보호 확인: python tests/test_release.py"""
 import io
+import copy
 import os
 from pathlib import Path
 import re
@@ -15,13 +16,49 @@ import updater
 
 
 class ReleaseTests(unittest.TestCase):
+    def test_open_dialog_starts_at_example_workbook_folder(self):
+        with patch('server.WINDOW') as window:
+            window.create_file_dialog.return_value = None
+            self.assertIsNone(server.ask_open())
+            directory = window.create_file_dialog.call_args.kwargs['directory']
+            self.assertTrue((Path(directory) / '학생기초자료(예시).xlsx').is_file())
+
+    def test_full_reset_survives_reload_and_keeps_original_files(self):
+        previous = copy.deepcopy(store.STATE)
+        try:
+            with tempfile.TemporaryDirectory() as root:
+                paths = {key: os.path.join(root, key + '.json') for key in (
+                    'CONFIG_SEP', 'CONFIG_JOIN', 'CONFIG_STUDENT', 'CONFIG_ASSIGN', 'SETTINGS')}
+                with patch.multiple(store, **paths):
+                    original = Path(root) / 'original.xlsx'
+                    exported = Path(root) / 'exported.xlsx'
+                    original.write_bytes(b'original data')
+                    exported.write_bytes(b'exported data')
+                    student = {'반': '1', '번호': '1', '이름': '가상학생', '성별': '남', '성적': 80}
+                    store.STATE.update(file_path=str(original), student_list=[student],
+                                       class_data=[[student]], num_classes=1, dirty=True,
+                                       sep_data=[{**student, '그룹': '1'}], join_data=[{**student, '그룹': '1'}],
+                                       history=[{'data': [], 'op': None, 't': 0}], initial=[[student]])
+                    store.write_json(store.SETTINGS, {'hideTour': True})
+                    store.save_configs()
+                    result = server.app.test_client().post('/api/reset_all').json
+                    self.assertTrue(result['ok'], result)
+                    store.load_configs()
+                    self.assertEqual(store.STATE, store.EMPTY_STATE)
+                    self.assertEqual(store.read_json(store.SETTINGS), {'hideTour': True})
+                    self.assertEqual(original.read_bytes(), b'original data')
+                    self.assertEqual(exported.read_bytes(), b'exported data')
+        finally:
+            store.STATE.clear()
+            store.STATE.update(previous)
+
     def test_screen_resources(self):
         client = server.app.test_client()
         page = client.get('/')
         self.assertEqual(page.status_code, 200)
-        assets = re.findall(r'(?:src|href)="((?:js|css)/[^"]+)"', page.text)
+        assets = re.findall(r'(?:src|href)="((?:js|css|assets)/[^"]+)"', page.text)
         page.close()
-        self.assertEqual(len(assets), 12)
+        self.assertEqual(len(assets), 14)
         for asset in assets:
             response = client.get('/' + asset)
             self.assertEqual(response.status_code, 200, asset)

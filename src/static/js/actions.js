@@ -1,5 +1,20 @@
 // 양식 내려받기, 명단 불러오기, 자동 편성 창, 결과 저장.
 
+async function resetAll() {
+  if (!await openConfirm(
+    "새 작업을 시작할까요?\n\n현재 명단·그룹·편성 결과를 초기화합니다.",
+    "전체 초기화", "전체 초기화")) return;
+  showLoading("전체 초기화 중…");
+  try {
+    const r = await api("/api/reset_all", "POST");
+    if (!r.ok) throw new Error(r.msg);
+    window.location.reload();
+  } catch (e) {
+    hideLoading();
+    toast(e.message || "전체 초기화를 완료하지 못했습니다.", "error");
+  }
+}
+
 /* ═══════════════════════════════════════════════════════
    ACTIONS (내려받기, 불러오기, 자동배정, 결과저장)
 ═══════════════════════════════════════════════════════ */

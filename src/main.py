@@ -7,6 +7,7 @@
     server.py   화면이 부르는 API
 """
 import threading
+import os
 
 import webview
 from werkzeug.serving import make_server
@@ -35,6 +36,6 @@ if __name__ == "__main__":
     )
     server.WINDOW.events.closing += server.on_closing
     try:
-        webview.start()
+        webview.start(icon=os.path.join(server.BASE, "static", "assets", "app.ico"))
     finally:
         http_server.shutdown()

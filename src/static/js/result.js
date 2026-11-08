@@ -163,7 +163,7 @@ function verifyChecks() {
   return { checks, rows };
 }
 
-function runVerify() {
+function runVerify(manual = false) {
   if (S.classData.length === 0) return;
   const { checks, rows } = verifyChecks();
   const bad = checks.filter(c => !c.ok), ok = checks.length - bad.length;
@@ -179,4 +179,5 @@ function runVerify() {
     `<tr><th>반</th><th>인원</th><th>남</th><th>여</th><th>평균</th><th>전체 평균과의 차이</th></tr>` +
     rows.map(r => `<tr><td>${r["학급"]}</td><td class="${r.big ? "f" : ""}">${r["총원"]}</td><td>${r["남"]}</td><td>${r["여"]}</td><td>${r["평균"]}</td>` +
       `<td class="${r.diff >= 0 ? "up" : "down"}">${r.diff >= 0 ? "▲" : "▼"}${Math.abs(r.diff).toFixed(1)}</td></tr>`).join("");
+  if (manual) toast("다시 검사를 완료하였습니다", "success");
 }
