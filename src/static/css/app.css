@@ -39,8 +39,8 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-/* 1600×900 이상은 기존 크기, 작은 창은 최대 10%까지 글자만 축소. */
-html { font-size: clamp(14.4px, min(1vw, 1.8vh), 16px); }
+/* 작은 창의 크기는 유지하고, 창의 가로·세로 여유에 따라 최대 25% 확대. */
+html { font-size: clamp(14.4px, min(1vw, 1.8vh), 18px); }
 html, body { height: 100%; overflow: hidden; }
 body {
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif;
