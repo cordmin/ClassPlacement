@@ -60,7 +60,7 @@ function renderResultPage(result) {
   }
 
   const filterBar = document.getElementById("filterBar");
-  filterBar.innerHTML = '<span style="font-size:12px;font-weight:700;color:var(--text-sub);">학급 선택:</span>';
+  filterBar.innerHTML = '<span style="font-size:0.75rem;font-weight:700;color:var(--text-sub);">학급 선택:</span>';
   const classLabels = stats.map(s => s.학급);
   if (!classLabels.includes(S.currentFilter)) {
     S.currentFilter = classLabels[0] || "1반";

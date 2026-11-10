@@ -47,12 +47,12 @@ function openGroupSelect(mode, names) {
     item.innerHTML = `
       <div style="min-width:0;">
         <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:13px;font-weight:800;color:var(--brand);">${g}그룹</span>
-          <span style="font-size:12px;color:var(--text-sub);font-weight:600;">${info.reason || "사유 없음"}</span>
+          <span style="font-size:0.8125rem;font-weight:800;color:var(--brand);">${g}그룹</span>
+          <span style="font-size:0.75rem;color:var(--text-sub);font-weight:600;">${info.reason || "사유 없음"}</span>
         </div>
-        <div style="font-size:12px;color:var(--text-sub);margin-top:4px;">${info.members.map(m => `${m["반"]}반 ${m["이름"]}`).join(", ")}</div>
+        <div style="font-size:0.75rem;color:var(--text-sub);margin-top:4px;">${info.members.map(m => `${m["반"]}반 ${m["이름"]}`).join(", ")}</div>
       </div>
-      <span style="font-size:11px;font-weight:700;padding:2px 10px;border-radius:20px;background:var(--surface-bg);color:var(--brand);">${info.members.length}명</span>
+      <span style="font-size:0.6875rem;font-weight:700;padding:2px 10px;border-radius:20px;background:var(--surface-bg);color:var(--brand);">${info.members.length}명</span>
     `;
     item.onclick = () => {
       picked = g;
