@@ -36,8 +36,13 @@ Name: "desktopicon"; Description: "바탕화면에 바로가기 만들기"; Grou
 Name: "korean"; MessagesFile: "compiler:Languages\Korean.isl"
 
 [Files]
+; 자동 업데이트 때 띄우는 설치 안내 창 (설치 폴더에는 복사하지 않음)
+Source: "update-progress.ps1"; Flags: dontcopy
+Source: "..\src\static\assets\app.ico"; Flags: dontcopy
+Source: "..\src\static\assets\app-icon.png"; Flags: dontcopy
 Source: "..\.build\dist\{#MyAppExe}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\src\static\privacy.txt"; DestDir: "{app}"; DestName: "개인정보처리방침.txt"; Flags: ignoreversion
+Source: "..\src\static\licenses.txt"; DestDir: "{app}"; DestName: "오픈소스라이선스.txt"; Flags: ignoreversion
 Source: "..\src\resources\학생기초자료(예시).xlsx"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
@@ -56,6 +61,43 @@ function SetEnvironmentVariable(lpName, lpValue: string): Boolean;
 procedure PrepareAppRestart;
 begin
   SetEnvironmentVariable('PYINSTALLER_RESET_ENVIRONMENT', '1');
+end;
+
+function GetCurrentProcessId: LongWord;
+  external 'GetCurrentProcessId@kernel32.dll stdcall';
+
+// 자동 업데이트(조용한 설치)는 화면이 없다. 설치부터 프로그램이 다시 열릴 때까지 따로 안내 창을 띄운다.
+function PrepareToInstall(var NeedsRestart: Boolean): String;
+var
+  ResultCode: Integer;
+  Dir, Script, PowerShellPath, Parameters: string;
+begin
+  Result := '';
+  if not WizardSilent then Exit;
+  try
+    // 설치가 먼저 끝나 임시 폴더가 지워져도 안내 창이 파일을 읽을 수 있게 자료 폴더로 옮긴다.
+    Dir := ExpandConstant('{userappdata}\학급편성');
+    ForceDirectories(Dir);
+    Script := Dir + '\update-progress.ps1';
+    ExtractTemporaryFile('update-progress.ps1');
+    ExtractTemporaryFile('app.ico');
+    ExtractTemporaryFile('app-icon.png');
+    if not FileCopy(ExpandConstant('{tmp}\update-progress.ps1'), Script, False) then
+      RaiseException('업데이트 안내 파일을 준비하지 못했습니다.');
+    FileCopy(ExpandConstant('{tmp}\app.ico'), Dir + '\app.ico', False);
+    FileCopy(ExpandConstant('{tmp}\app-icon.png'), Dir + '\app-icon.png', False);
+    Parameters := '-NoProfile -NonInteractive -STA -ExecutionPolicy Bypass -WindowStyle Hidden -File ' +
+      AddQuotes(Script) + ' -InstallerPid ' + IntToStr(GetCurrentProcessId) +
+      ' -AppPath ' + AddQuotes(ExpandConstant('{app}\{#MyAppExe}')) + ' -Version {#MyAppVersion}';
+    if IsWin64 then
+      PowerShellPath := ExpandConstant('{sysnative}\WindowsPowerShell\v1.0\powershell.exe')
+    else
+      PowerShellPath := ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe');
+    if not Exec(PowerShellPath, Parameters, '', SW_HIDE, ewNoWait, ResultCode) then
+      Log('업데이트 안내 창 실행 실패: ' + IntToStr(ResultCode));
+  except
+    Log('업데이트 안내 창 준비 실패: ' + GetExceptionMessage);
+  end;
 end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);

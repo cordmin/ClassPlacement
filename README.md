@@ -17,6 +17,8 @@
 
 [개인정보 처리방침](src/static/privacy.txt)은 앱의 사이드바 아래와 설치 화면에서도 확인할 수 있습니다. 이 파일을 수정하면 앱·설치 안내에 함께 반영됩니다.
 
+[오픈소스 라이선스](src/static/licenses.txt)는 사이드바의 LICENSES 버튼과 설치 폴더의 `오픈소스라이선스.txt`에서 볼 수 있습니다. 라이브러리를 더하거나 버전을 올리면 `.venv\Scripts\python.exe scripts/make_licenses.py`로 다시 만듭니다.
+
 Python 3.12와 Windows에서 다음 명령으로 실행합니다.
 
 ```powershell
@@ -68,6 +70,7 @@ src/                  프로그램 코드
   static/css/         화면 스타일
   static/js/          화면 기능
   static/privacy.txt  앱·설치 화면에서 함께 쓰는 개인정보 처리방침
+  static/licenses.txt 오픈소스 라이선스 안내 (scripts/make_licenses.py 로 생성)
   resources/          공유 가능한 예시 엑셀
 packaging/            PyInstaller·Inno Setup 설정
 scripts/build.ps1     테스트 및 설치 파일 빌드

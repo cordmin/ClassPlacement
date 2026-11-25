@@ -28,8 +28,8 @@ async function checkUpdate(manual = false) {
     pendingUpdate = { current: btn.textContent, version: "새 버전", preview: true, notes: res.notes };
     openUpdate();
   } else if (manual) {
-    toast({ latest: "지금 최신 버전을 쓰고 있어요." }[res.status]
-          || "업데이트를 확인하지 못했어요. 인터넷 연결을 확인해 주세요.", res.status === "error" ? "error" : "info");
+    toast({ latest: "현재 최신 버전을 사용하고 있습니다." }[res.status]
+          || "업데이트를 확인하지 못했습니다. 인터넷 연결을 확인해 주십시오.", res.status === "error" ? "error" : "info");
   }
 }
 
@@ -64,7 +64,7 @@ document.getElementById("updOk").onclick = async () => {
   if (pendingUpdate?.preview) { closeUpdate(); return; }
   setUpdateBusy(true);
   document.getElementById("updOk").textContent = "받는 중…";
-  document.getElementById("updMsg").textContent = "새 버전을 받는 중입니다.\n받기가 끝나면 프로그램이 종료되고, 설치가 끝나면 자동 재시작됩니다.";
+  document.getElementById("updMsg").textContent = "새 버전을 받는 중입니다.\n받기가 끝나면 프로그램이 종료되고, 별도 창에서 설치 진행 상황을 안내합니다.";
   const r = await api("/api/update/install", "POST", { version: pendingUpdate.version }).catch(e => ({ ok: false, msg: e.message }));
   if (r.ok) return;   // 곧 창이 닫힌다
   setUpdateBusy(false);

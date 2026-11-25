@@ -279,6 +279,7 @@ body {
 .sidebar-footer p { font-size: 0.65625rem; color: #64748B; line-height: 1.6; }
 .privacy-link { background: none; border: 0; padding: 4px; color: #CBD5E1; font: inherit; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .privacy-link:hover { color: #FFFFFF; }
+.footer-links { display: flex; justify-content: center; gap: 10px; }
 .privacy-dialog { margin: auto; padding: 0; width: 760px; max-width: calc(100vw - 48px); max-height: calc(100vh - 80px); border: 1px solid var(--line-dark); border-radius: var(--radius-lg); color: var(--text-main); background: var(--card-bg); box-shadow: var(--shadow-lg); }
 .privacy-dialog[open] { display: flex; flex-direction: column; }
 .privacy-dialog::backdrop { background: rgba(15,23,42,0.55); backdrop-filter: blur(4px); }
