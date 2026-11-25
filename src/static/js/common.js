@@ -38,7 +38,20 @@ async function api(url, method="GET", body=null) {
   const opts = { method, headers: {"Content-Type":"application/json"} };
   if (body) opts.body = JSON.stringify(body);
   const r = await fetch(url, opts);
-  return r.json();
+  const data = await r.json();
+  // 자료를 바꾸는 호출은 서버가 곧바로 자동 저장 파일에 쓴다 → 타이틀바 표시를 잠깐 돌린다
+  if (method !== "GET" && !NO_AUTOSAVE.test(url) && data?.ok !== false) flashSaved();
+  return data;
+}
+const NO_AUTOSAVE = /^\/api\/(window|update|settings|download_template)/;
+let savedTimer = 0;
+function flashSaved() {
+  const el = document.getElementById("saveState");
+  if (!el) return;
+  el.hidden = false;
+  el.classList.add("saving");
+  clearTimeout(savedTimer);
+  savedTimer = setTimeout(() => el.classList.remove("saving"), 900);
 }
 
 /* ═══════════════════════════════════════════════════════

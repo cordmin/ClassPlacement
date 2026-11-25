@@ -21,6 +21,10 @@ async function init() {
   }
 
   document.getElementById("appVersion").textContent = `v${r.version}`;
+  if (S.studentList.length) {
+    document.getElementById("saveState").hidden = false;
+    toast("지난 작업을 불러왔습니다.", "info");
+  }
   tourHidden = !!r.settings.hideTour;
   if (!tourHidden) startTour();
   checkUpdate();

@@ -9,7 +9,7 @@ function element(id) {
   if (!elements.has(id)) elements.set(id, {
     textContent: '', innerHTML: '', disabled: false, hidden: false,
     classList: { add() {}, remove() {} }, focus() {},
-    addEventListener() {}, showModal() { this.open = true; }, close() { this.open = false; },
+    addEventListener() {}, replaceChildren(...items) { this.children = items; }, showModal() { this.open = true; }, close() { this.open = false; },
   });
   return elements.get(id);
 }

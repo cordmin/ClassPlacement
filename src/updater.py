@@ -26,15 +26,43 @@ def version_tuple(v):
     return tuple(int(x) for x in v.lstrip('v').split('.'))
 
 
+def release_notes(text, tag):
+    """RELEASE_NOTES.md 에서 그 버전(## v3.1.5) 아래의 '- ' 줄만 꺼낸다."""
+    notes, inside = [], False
+    for line in text.splitlines():
+        if line.startswith('## '):
+            inside = line[3:].strip() == tag
+        elif inside and line.startswith('- '):
+            notes.append(line[2:].strip())
+    return notes
+
+
+def fetch_notes(tag):
+    # 릴리스에 올린 그 태그의 RELEASE_NOTES.md 를 읽는다. 못 읽으면 목록 없이 묻는다.
+    try:
+        url = f'https://raw.githubusercontent.com/{UPDATE_REPO}/{tag}/RELEASE_NOTES.md'
+        with urllib.request.urlopen(url, timeout=5) as r:
+            return release_notes(r.read().decode('utf-8'), tag)
+    except Exception as e:
+        print(f"업데이트 내역 확인 실패: {e}")
+        return []
+
+
 def check_update():
     if not getattr(sys, 'frozen', False):
-        return {"available": False, "status": "development"}
+        # 개발 실행: 화면 미리보기용으로 지금 버전의 내역을 보여 준다
+        local = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'RELEASE_NOTES.md')
+        try:
+            notes = release_notes(open(local, encoding='utf-8').read(), f'v{APP_VERSION}')
+        except OSError:
+            notes = []
+        return {"available": False, "status": "development", "notes": notes}
     try:
         with urllib.request.urlopen(f'https://github.com/{UPDATE_REPO}/releases/latest', timeout=5) as r:
             tag = r.geturl().rstrip('/').rsplit('/', 1)[-1]
         if not SAFE_TAG.fullmatch(tag) or version_tuple(tag) <= version_tuple(APP_VERSION):
             return {"available": False, "status": "latest", "version": tag}
-        return {"available": True, "version": tag, "current": f"v{APP_VERSION}"}
+        return {"available": True, "version": tag, "current": f"v{APP_VERSION}", "notes": fetch_notes(tag)}
     except Exception as e:   # 오프라인이거나 릴리스가 없으면 조용히 넘어간다
         print(f"업데이트 확인 실패: {e}")
         return {"available": False, "status": "error"}

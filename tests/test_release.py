@@ -83,6 +83,11 @@ class ReleaseTests(unittest.TestCase):
             open_url.side_effect = TimeoutError('offline')
             self.assertEqual(updater.check_update()['status'], 'error')
 
+    def test_release_notes_only_for_that_version(self):
+        text = "## v3.1.5\n\n- 새 기능\n- 오류 수정\n\n## v3.1.4\n\n- 옛 내용\n"
+        self.assertEqual(updater.release_notes(text, 'v3.1.5'), ['새 기능', '오류 수정'])
+        self.assertEqual(updater.release_notes(text, 'v9.9.9'), [])
+
     def test_invalid_tag_never_downloads(self):
         with patch('updater.urllib.request.urlopen') as open_url:
             for tag in ('../bad', 'v3.1.0/evil', 'v3%2f1', None):

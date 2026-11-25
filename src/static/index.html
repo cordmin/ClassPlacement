@@ -43,6 +43,7 @@
   <symbol id="i-square" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/></symbol>
   <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
   <symbol id="i-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-loader" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.2-8.56"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
 </svg>
 
@@ -53,6 +54,7 @@
     <div class="titlebar-title" ondblclick="onTitlebarDblClick(event)">
       <span class="pywebview-drag-region">학급 편성</span>
       <button id="appVersion" class="titlebar-chip" onclick="openAbout()" title="프로그램 정보 및 업데이트"></button>
+      <span id="saveState" class="save-state" hidden><svg width="12" height="12"><use href="#i-loader"/></svg>자동 저장됨</span>
       <span class="titlebar-drag-space pywebview-drag-region"></span>
     </div>
     <div class="titlebar-controls">
@@ -113,12 +115,12 @@
             <div class="tooltip-bubble">명단 불러오기</div>
           </div>
 
-          <!-- 결과저장 아이콘 -->
+          <!-- 편성결과 저장 아이콘 -->
           <div class="sidebar-icon-wrapper">
-            <button class="sidebar-icon-btn" onclick="saveExcel()" aria-label="결과저장">
+            <button class="sidebar-icon-btn" onclick="saveExcel()" aria-label="편성결과 저장">
               <svg width="18" height="18"><use href="#i-save"/></svg>
             </button>
-            <div class="tooltip-bubble">결과 엑셀저장</div>
+            <div class="tooltip-bubble">편성결과 저장</div>
           </div>
 
         </div>
@@ -415,15 +417,15 @@
 <div id="close-overlay" class="modal-overlay-bg" onkeydown="if(event.key==='Escape'){event.stopPropagation();cancelClose();}">
   <div class="modal-box-styled">
     <div class="modal-head-styled">
-      <svg width="20" height="20"><use href="#i-help-circle"/></svg> 저장 확인
+      <svg width="20" height="20"><use href="#i-help-circle"/></svg> 프로그램 종료
     </div>
     <div class="modal-body">
-      <div>편성 결과가 바뀌었는데 아직 저장하지 않았어요.</div>
-      <div>종료하기 전에 저장할까요?</div>
+      <div>지금까지 작업한 내용은 자동 저장되어있습니다.</div>
+      <div>현재 편성 결과를 엑셀 파일로도 저장하시겠습니까?</div>
     </div>
     <div class="modal-btns">
-      <button class="btn-sm btn-navy" onclick="finishClose(true)">저장 후 종료</button>
-      <button class="btn-sm" onclick="finishClose(false)">저장 없이 종료</button>
+      <button class="btn-sm btn-navy" onclick="finishClose(true)">엑셀로 저장</button>
+      <button class="btn-sm" onclick="finishClose(false)">프로그램 종료</button>
       <button class="btn-sm" id="closeCancelBtn" onclick="cancelClose()">취소</button>
     </div>
   </div>
@@ -459,12 +461,13 @@
     </div>
     <div class="modal-body update-body">
       <div class="update-vers"><span id="updFrom"></span><svg width="16" height="16"><use href="#i-arrow-right"/></svg><b id="updTo"></b></div>
+      <div class="update-notes" id="updNotesBox" hidden><h4>업데이트 내역</h4><ul id="updNotes"></ul></div>
       <div id="updMsg"></div>
       <p id="updPreview" class="update-preview" hidden>화면 미리보기 · 실제 설치는 실행하지 않습니다.</p>
       <div class="update-bar" id="updBar" hidden><i></i></div>
     </div>
     <div class="modal-btns">
-      <button class="btn-sm btn-navy" id="updOk">업데이트</button>
+      <button class="btn-sm btn-navy" id="updOk">지금 업데이트</button>
       <button class="btn-sm" id="updLater" onclick="closeUpdate()">나중에</button>
     </div>
   </div>
