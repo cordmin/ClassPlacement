@@ -893,6 +893,7 @@ body.class-dragging, body.class-dragging * { cursor: grabbing !important; user-s
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; color: var(--text-faint); gap: 12px; }
+.empty-load p { font-size: 0.9375rem; font-weight: 600; color: var(--text-sub); }   /* 명단 불러오기 안내: 본문보다 2px 크고 진하게 */
 
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
